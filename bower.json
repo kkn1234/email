@@ -1,0 +1,21 @@
+{
+  "name": "spoon.js-sample-app",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#2.0.0",
+    "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
+    "paper-button": "PolymerElements/paper-button#^2.0.0",
+    "paper-input": "PolymerElements/paper-input#^2.0.2",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.0",
+    "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
+    "paper-item": "PolymerElements/paper-item#^2.0.0",
+    "web-animations-js": "web-animations/web-animations-js#^2.2",
+    "datetime-picker": "fooloomanzoo/datetime-picker#^2.3.0",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1"
+  }
+}

@@ -1,0 +1,195 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/neon-animation/web-animations.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
+<link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/datetime-picker/datetime-picker.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
+
+
+
+
+
+<dom-module id="email-report-component">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .modal-width{
+        width: 90%;
+      }
+      paper-item{
+        cursor: pointer;
+      }
+      .displayTime{
+        display: none;
+      }
+      .ReportStartDate, .ReportEndDate{
+        display: none;
+      }
+    </style>
+<h2>Hello [[prop1]]!</h2>
+<paper-button raised on-click="openDialog">dialog with actions</paper-button>
+<span id="check"></span>
+
+
+<paper-dialog id="actoins" class="modal-width">
+  <h2>Email Report</h2>
+  <hr>
+  <div id="emailForm">
+
+
+    <paper-input label="Report Title" value="{{title}}"></paper-input>
+    <paper-dropdown-menu-light label="Frequency" on-iron-select="_itemFrequencySelected">
+      <paper-listbox slot="dropdown-content" class="dropdown-content">
+        <paper-item>Last 10 days</paper-item>
+        <paper-item>Last 20 days</paper-item>
+        <paper-item>Last 30 days</paper-item>
+        <paper-item>On Time</paper-item>
+      </paper-listbox>
+    </paper-dropdown-menu-light>
+
+    <paper-input label="Time" on-tap="_selectTime" value="{{time}}"></paper-input>
+    <div id="time" class="displayTime">
+      <time-element id="time_1" time="{{time}}"></time-element>
+    </div>
+
+    <paper-dropdown-menu-light label="Report For" on-iron-select="_itemReportForSelected">
+      <paper-listbox slot="dropdown-content" class="dropdown-content">
+        <paper-item>Last 10 days</paper-item>
+        <paper-item>Last 20 days</paper-item>
+        <paper-item>Last 30 days</paper-item>
+        <paper-item>On Time</paper-item>
+      </paper-listbox>
+    </paper-dropdown-menu-light>
+
+    <paper-input label="Report Start Date" on-tap="_selectReportStartDate" value="[[ReportStartDate]]"></paper-input>
+    <div class="ReportStartDate" id="ReportStartDate">
+      <calendar-element id="startDate" date="{{ReportStartDate}}"></calendar-element>
+    </div>
+
+    <paper-input label="Report End Date" on-tap="_selectReportEndDate" value="[[ReportStartDate]]"></paper-input>
+    <div class="ReportEndDate" id="ReportEndDate">
+      <calendar-element id="endDate" date="{{ReportEndDate}}"></calendar-element>
+    </div>
+
+    <paper-checkbox checked="{{csv}}">Include details in CSV</paper-checkbox>
+    <paper-checkbox checked="{{pdf}}">Include details in PDF</paper-checkbox>
+
+    <paper-input label="Add Recipients" value="[[addRecipients]]"></paper-input>
+
+  </div>
+
+  <hr>
+  <div class="buttons">
+    <paper-button dialog-dismiss>Cancel</paper-button>
+    <paper-button dialog-confirm autofocus on-click="_sendEmailReport">Send</paper-button>
+  </div>
+</paper-dialog>
+
+
+
+</template>
+
+<script>
+  /**
+   * `email-report-component`
+   * Email report configuration element
+   *
+   * @customElement
+   * @polymer
+   * @demo demo/index.html
+   */
+  class EmailReportComponent extends Polymer.Element {
+    static get is() { return 'email-report-component'; }
+    static properties() {
+      return {
+        checked: {
+          type: Boolean,
+          value: false
+        }
+      }
+    }
+
+    constructor() {
+      super();
+    }
+
+    openDialog() {
+      this.title = '';
+      this.$.actoins.open();
+      console.log(this.$.emailForm);
+      this.$.emailForm.addEventListener('click', (event) => {
+        console.log(event)
+        console.log(event.target)
+        if (event.target.id == 'time_1') {
+          this.$.time.style.display = 'block';
+        } else {
+          this.$.time.style.display = 'none';
+        }
+
+        if (event.target.id == 'startDate') {
+          this.$.ReportStartDate.style.display = 'block';
+        } else {
+          this.$.ReportStartDate.style.display = 'none';
+        }
+
+
+        if (event.target.id == 'endDate') {
+          this.$.ReportEndDate.style.display = 'block';
+        } else {
+          this.$.ReportEndDate.style.display = 'none';
+        }
+      });
+
+    }
+
+    _sendEmailReport() {
+      console.log('send buttn clicked');
+      var EmailReport = {
+        Report_Title: this.title,
+        Frequency: this.selected_frequency,
+        Time: this.time,
+        ReportFor: this.selected_reportFor,
+        ReportStartDate: this.ReportStartDate,
+        CSV: this.csv,
+        PDF: this.pdf,
+        addRecipients: this.addRecipients
+      }
+      console.log(EmailReport);
+    }
+
+    _selectTime() {
+      this.$.time.style.display = 'block';
+    }
+    _selectReportStartDate() {
+      this.$.ReportStartDate.style.display = 'block';
+    }
+    _selectReportEndDate() {
+      this.$.ReportEndDate.style.display = 'block';
+    }
+    _itemFrequencySelected(e) {
+      var selectedItem = e.target.selectedItem;
+      if (selectedItem) {
+        console.log("selected: " + selectedItem.innerText);
+        this.selected_frequency = selectedItem.innerText;
+      }
+    }
+
+    _itemReportForSelected(e) {
+      var selectedItem = e.target.selectedItem;
+      if (selectedItem) {
+        console.log("selected: " + selectedItem.innerText);
+        this.selected_reportFor = selectedItem.innerText;
+      }
+    }
+
+  }
+
+  customElements.define(EmailReportComponent.is, EmailReportComponent);
+</script>
+</dom-module>
